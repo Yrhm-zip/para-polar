@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Você me ama Polar?</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial, Helvetica, sans-serif;
+}
+
+body{
+    min-height:100vh;
+    overflow:hidden;
+    background:linear-gradient(135deg,#ff9a9e,#fad0c4);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+
+.container{
+    text-align:center;
+    padding:20px;
+}
+
+h1,h2{
+    color:white;
+    text-shadow:0 2px 10px rgba(0,0,0,.2);
+}
+
+#texto{
+    margin-bottom:25px;
+    font-size:2.5rem;
+}
+
+button{
+    border:none;
+    cursor:pointer;
+    border-radius:999px;
+    transition:.3s;
+    font-weight:bold;
+}
+
+#sim{
+    background:white;
+    color:#ff4d6d;
+    min-width:140px;
+    min-height:55px;
+    padding:15px 35px;
+    font-size:1.2rem;
+    box-shadow:0 10px 25px rgba(0,0,0,.15);
+    z-index:10;
+    position:relative;
+}
+
+#nao{
+    background:#ff4d6d;
+    color:white;
+    padding:15px 35px;
+    font-size:1.2rem;
+    position:fixed;
+    left:calc(50% + 100px);
+    top:50%;
+    box-shadow:0 10px 25px rgba(0,0,0,.15);
+}
+
+#quiz{
+    display:none;
+    width:100%;
+    max-width:900px;
+    text-align:center;
+    padding:20px;
+}
+
+.pergunta{
+    color:white;
+    font-size:1.7rem;
+    margin-bottom:30px;
+}
+
+.opcoes{
+    display:flex;
+    flex-direction:column;
+    gap:15px;
+}
+
+.opcao{
+    background:white;
+    color:#ff4d6d;
+    padding:18px;
+    border-radius:18px;
+    font-size:1rem;
+}
+
+.opcao:hover{
+    transform:scale(1.03);
+}
+
+#resultado{
+    display:none;
+    text-align:center;
+    color:white;
+    padding:20px;
+}
+
+#resultado h1{
+    font-size:3rem;
+    margin-bottom:20px;
+}
+
+#resultado p{
+    font-size:1.3rem;
+    line-height:1.8;
+    max-width:800px;
+}
+
+.coracao{
+    position:fixed;
+    top:-50px;
+    font-size:30px;
+    animation:cair linear forwards;
+    pointer-events:none;
+}
+
+@keyframes cair{
+    to{
+        transform:translateY(110vh);
+    }
+}
+
+@keyframes pulse{
+    50%{
+        transform:scale(1.15);
+    }
+}
+
+#heartBig{
+    font-size:7rem;
+    animation:pulse 1s infinite;
+    margin-bottom:20px;
+}
+
+#erro{
+    position:fixed;
+    top:20px;
+    left:50%;
+    transform:translateX(-50%);
+    background:white;
+    color:#ff4d6d;
+    padding:15px 25px;
+    border-radius:15px;
+    font-weight:bold;
+    display:none;
+    z-index:9999;
+}
+
+@media(max-width:700px){
+
+    #texto{
+        font-size:2rem;
+    }
+
+    .pergunta{
+        font-size:1.3rem;
+    }
+
+    .opcao{
+        font-size:.95rem;
+    }
+
+}
+</style>
+</head>
+
+<body>
+
+<div id="erro">
+    Errou! Acho que você precisa me conhecer melhor...
+</div>
+
+<div class="container" id="inicio">
+
+    <h1 id="texto">Você me ama Polar?</h1>
+
+    <button id="sim">Sim ❤️</button>
+
+</div>
+
+<button id="nao">Não 💔</button>
+
+<div id="quiz">
+
+    <div class="pergunta" id="pergunta"></div>
+
+    <div class="opcoes" id="opcoes"></div>
+
+</div>
+
+<div id="resultado">
+
+    <div id="heartBig">❤️</div>
+
+    <h1>Parabéns Polar!</h1>
+
+    <p>
+        Você chegou até o final.
+        Talvez nenhuma pergunta consiga realmente medir
+        o quanto você é especial.
+
+        Sua beleza parece ter sido escrita pelas próprias estrelas,
+        tão rara que nenhuma constelação consegue imitá-la e tão intensa
+        que faz o universo parecer simples diante de você.
+
+        Obrigado por existir.
+        ❤️
+    </p>
+
+</div>
+
+<script>
+
+const frases = [
+"Tem certeza?",
+"Sério mesmo?",
+"Pensa melhor...",
+"Olha que eu vou ficar triste...",
+"Muito triste...",
+"Por favor?",
+"Não faz isso comigo...",
+"Última chance..."
+];
+
+const perguntas = [
+
+{
+pergunta:"1 - Quem tem os olhos mais lindos, e que é inigualável sua beleza, um brilho tão exuberante que ofusca. Quem tem esses olhos?",
+opcoes:[
+"A) Rhamon",
+"B) Polar (lindo e maravilhoso)",
+"C) Ashley"
+],
+corretas:[1]
+},
+
+{
+pergunta:"2 - O que eu mais jogo?",
+opcoes:[
+"A) Roblox",
+"B) Free Fire",
+"C) The Coffin of Andy and Leyley",
+"D) My Femboy Roommate"
+],
+corretas:[1]
+},
+
+{
+pergunta:"3 - Como nos conhecemos?",
+opcoes:[
+"A) PKXD",
+"B) Roblox",
+"C) Discord",
+"D) Sei lá, sou seu femboy"
+],
+corretas:[2,3]
+},
+
+{
+pergunta:"4 - Qual o pior da lista?",
+opcoes:[
+"A) Shafix",
+"B) Gabriel",
+"C) Tsuo",
+"D) Rhamon"
+],
+corretas:[0,1]
+},
+
+{
+pergunta:"5 - O que eu mais amo em você?",
+opcoes:[
+"A) Porque você é femboy",
+
+"B) Porque sua beleza parece ter sido escrita pelas próprias estrelas; tão rara que nenhuma constelação consegue imitá-la e tão intensa que faz o universo parecer simples diante de você.",
+
+"C) Porque temos os mesmos gostos",
+
+"D) Beleza"
+],
+corretas:[1]
+}
+
+];
+
+const texto = document.getElementById("texto");
+const sim = document.getElementById("sim");
+const nao = document.getElementById("nao");
+const inicio = document.getElementById("inicio");
+
+const quiz = document.getElementById("quiz");
+const pergunta = document.getElementById("pergunta");
+const opcoes = document.getElementById("opcoes");
+
+const resultado = document.getElementById("resultado");
+const erro = document.getElementById("erro");
+
+let etapa = 0;
+let larguraSim = 140;
+let alturaSim = 55;
+let fonteSim = 1.2;
+let escalaNao = 1;
+
+let perguntaAtual = 0;
+
+function moverBotao(){
+
+const largura = window.innerWidth - nao.offsetWidth - 20;
+const altura = window.innerHeight - nao.offsetHeight - 20;
+
+nao.style.left = Math.random()*largura + "px";
+nao.style.top = Math.random()*altura + "px";
+
+}
+nao.addEventListener("click", () => {
+
+    if(etapa < frases.length){
+        texto.textContent = frases[etapa];
+    }
+
+    larguraSim += 40;
+    alturaSim += 15;
+    fonteSim += 0.15;
+
+    sim.style.width = larguraSim + "px";
+    sim.style.height = alturaSim + "px";
+    sim.style.fontSize = fonteSim + "rem";
+
+    escalaNao -= 0.12;
+
+    if(escalaNao > 0.15){
+
+        nao.style.transform = `scale(${escalaNao})`;
+        moverBotao();
+
+    }else{
+
+        nao.style.display = "none";
+        texto.textContent = "Agora você não tem escolha... ❤️";
+
+    }
+
+    etapa++;
+
+});
+
+function carregarPergunta(){
+
+    pergunta.innerHTML = perguntas[perguntaAtual].pergunta;
+
+    opcoes.innerHTML = "";
+
+    perguntas[perguntaAtual].opcoes.forEach((textoOpcao,index)=>{
+
+        const botao = document.createElement("button");
+
+        botao.className = "opcao";
+
+        botao.innerText = textoOpcao;
+
+        botao.addEventListener("click",()=>{
+
+            verificarResposta(index);
+
+        });
+
+        opcoes.appendChild(botao);
+
+    });
+
+}
+
+function mostrarErro(){
+
+    erro.style.display = "block";
+
+    setTimeout(()=>{
+
+        erro.style.display = "none";
+
+    },2500);
+
+}
+
+function reiniciarQuiz(){
+
+    perguntaAtual = 0;
+
+    carregarPergunta();
+
+}
+
+function verificarResposta(indice){
+
+    const corretas = perguntas[perguntaAtual].corretas;
+
+    if(corretas.includes(indice)){
+
+        perguntaAtual++;
+
+        if(perguntaAtual >= perguntas.length){
+
+            finalizarQuiz();
+
+        }else{
+
+            carregarPergunta();
+
+        }
+
+    }else{
+
+        mostrarErro();
+
+        setTimeout(()=>{
+
+            reiniciarQuiz();
+
+        },1200);
+
+    }
+
+}
+
+function criarCoracao(){
+
+    const coracao = document.createElement("div");
+
+    coracao.className = "coracao";
+
+    coracao.innerHTML = "❤️";
+
+    coracao.style.left = Math.random() * window.innerWidth + "px";
+
+    coracao.style.animationDuration =
+        (Math.random() * 3 + 3) + "s";
+
+    document.body.appendChild(coracao);
+
+    setTimeout(()=>{
+
+        coracao.remove();
+
+    },6000);
+
+}
+
+function finalizarQuiz(){
+
+    quiz.style.display = "none";
+
+    resultado.style.display = "block";
+
+    setInterval(criarCoracao,250);
+
+}
+
+sim.addEventListener("click",()=>{
+
+    inicio.style.display = "none";
+
+    nao.style.display = "none";
+
+    quiz.style.display = "block";
+
+    carregarPergunta();
+
+});
+
+setTimeout(moverBotao,300);
+
+</script>
+
+</body>
+</html>
